@@ -1,0 +1,179 @@
+qUESTION  01
+1.Create table DEPT with the following structure:-
+DEPTNO			int(2)
+DNAME			varchar(15)
+LOC				varchar(10)
+
+Insert the following rows into the DEPT table:-
+10	ACCOUNTING	NEW YORK
+20	RESEARCH		DALLAS
+30	SALES		CHICAGO
+40	OPERATIONS	BOSTON
+
+
+
+
+
+
+
+show databases;
+use latur;
+create table dept
+(
+deptno int,
+Dname varchar(15),
+loc varchar(10)
+);
+insert into dept values
+(10,'accounting','newyork'),
+(20,'research','dallas'),
+(30,'sales','chicago'),
+(40,'operation','boston');
+select * from dept;
+
+
+
+
+
+qUESTION 02
+
+2.Create table EMP with the following structure:-
+EMPNO			int(4)
+ENAME			varchar(10)
+JOB				varchar(9)
+HIREDATE			date
+SAL				float(7,2)
+COMM			float(7,2)
+DEPTNO			int(2)
+
+Insert the following rows into the EMP table:-
+7839	KING		MANAGER	1991-11-17	5000	NULL	10
+7698	BLAKE	CLERK	1981-05-01	2850	NULL	30
+7782	CLARK	MANAGER	1981-06-09	2450	NULL	10
+7566	JONES	CLERK	1981-04-02	2975	NULL 20
+7654	MARTIN	SALESMAN	1981-09-28	1250	1400	30
+7499	ALLEN	SALESMAN	1981-02-20	1600	300	30
+
+Write SELECT statements to achieve the following:-
+3.Display all the employees where SAL between 2500 and 5000 (inclusive of both).
+4.Display all the ENAMEs in descending order of ENAME.
+5.Display all the JOBs in lowercase.
+6.Display the ENAMEs and the lengths of the ENAMEs.
+7.Display the DEPTNO and the count of employees who belong to that DEPTNO .
+8.Display the DNAMEs and the ENAMEs who belong to that DNAME.
+9.Display the position at which the string ‘AR’ occurs in the ename.
+10.Display the HRA for each employee given that HRA is 20% of SAL.
+
+
+
+
+
+
+
+
+
+show databases;
+use latur;
+create table emp1
+(empno int,
+ename varchar(10),
+job varchar(9),
+hiredate date,
+sal float,
+comm float,
+deptno int
+);
+insert into emp1 values
+(7839,'KING','MANAGER','1991-11-17',5000,null,10),
+(7698,'BLAKE','CLERK','1981-05-01',2850,null,10),
+(7782,'CLARK','MANAGER','1981-06-09',2450,null,10),
+(7566,'JONES','CLERK','1981-04-02',2975,null,20),
+(7654,'MARTIN','SALESMAN','1981-09-28',1250,1400,30),
+(7499,'ALLEN','SALESMAN','1981-02-20',1600,300,30);
+SELECT * FROM EMP1;
+/*SAL BETWEEEN 2500 AND 5000*/
+SELECT * FROM EMP1 WHERE SAL between 2500 AND 5000;
+SELECT ENAME FROM EMP1 ORDER BY ENAME desc;
+SELECT lower(JOB) FROM EMP1;
+SELECT ENAME,LENGTH(ENAME) FROM EMP1;
+select instr(ENAME,'AR')FROM EMP1;
+SELECT SAL*0.2 "HRA" FROM EMP1;
+SELECT DNAME,ENAME FROM DEPT,EMP1 WHERE EMP1.DEPTNO=DEPT.DEPTNO; 
+
+
+
+
+
+
+
+qUESTION003
+1.Write a stored procedure by the name of PROC1 that accepts two varchar strings as parameters. Your procedure should then determine if the first varchar string exists inside the varchar string. For example, if string1 = ‘DAC’ and string2 = ‘CDAC, then string1 exists inside string2.  The stored procedure should insert the appropriate message into a suitable TEMPP output table. Calling program for the stored procedure need not be written.
+
+
+
+USE LATUR;
+create table TEMPP(STR1 VARCHAR(30),STR2 VARCHAR(30),RESULT VARCHAR(15));
+delimiter//
+create PROCEDURE PROC1(STR1 VARCHAR(30),STR2 VARCHAR(30))
+BEGIN
+DECLARE X INT DEFAULT -1;
+SET X=instr(STR2,STR1);
+IF X>0 THEN
+INSERT INTO TEMPP VALUES(STR1,STR2,'YES');
+ELSE
+INSERT INTO TEMPP VALUES(STR1,STR2,'NO');
+END IF;
+END;//
+DELIMITER;
+DROP PROCEDURE PROC1;
+CALL PROC('CDAC','CDAC');
+CALL PROC1('PGDAC','CDAC');
+SELECT 8 FROM TEMPP;
+TRUNCATE TABLE TEMPP;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+qUESTION04
+Create a stored function by the name of FUNC1 to take three parameters, the sides of a triangle. The function should return a Boolean value:- TRUE if the triangle is valid, FALSE otherwise. A triangle is valid if the length of each side is less than the sum of the lengths of the other two sides. Check if the dimensions entered can form a valid triangle. Calling program for the stored function need not be written
+CREATE FUNCTION FUN1(S1 INT,S2 INT,S3 INT )
+RETURNS BOOLEAN 
+DETERMINISTIC 
+BEGIN
+DECLEARE X INT DEFAULT FALSE;
+
+IF S1<(S2+S3)AND S3 <(S1+S2) THEN
+RETURN TRUE;
+ELSE 
+RETURN FALSE;
+END IF;
+END;//
+DELIMITER;
+DELIMITER //
+CREATE procedure PROC2(S1 INT,S2 INT,S3 INT)
+BEGIN
+DECLARE RESULT BOOLEAN;
+SET RESULT =FUN1(S1,S2,S3);
+IF RESULT THEN 
+INSERT INTO TRIANGLE (S1,S2,S3,TRIANGLE)VALUES (S1,S2,S3,'YES');
+ELSE 
+INSERT INTO TRIANGLE (S1,S2,S3,TRIANGLE) VALUES (S1,S2,S3,'NO');
+END IF ;
+END;//
+DELIMITER;
+
+ 
